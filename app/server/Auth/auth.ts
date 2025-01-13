@@ -1,14 +1,8 @@
-import { profile } from "console";
 import prisma from "../prisma";
+import { Prisma, User, UserProfile } from "@prisma/client";
 
 
-interface User {
-  username: string,
-  email: string
-}
-
-
-export const registerUser = async (data: User): Promise<void> => {
+export const registerUser = async (data: Prisma.UserCreateInput): Promise<void> => {
   const createdUser = prisma.user.create({
     data,
     include: {
@@ -17,10 +11,10 @@ export const registerUser = async (data: User): Promise<void> => {
   });
 }
 
-export const loginUser = async (data: User): Promise<User> => {
+export const loginUser = async (data: Prisma.UserCreateInput): Promise<User | null> => {
   const user = prisma.user.findUnique({
     where: {
-      username: data.username,
+      name: data.name,
       email: data.email
     }
   });
