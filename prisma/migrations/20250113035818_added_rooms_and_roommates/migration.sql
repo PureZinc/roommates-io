@@ -1,0 +1,22 @@
+-- AlterTable
+ALTER TABLE "User" ADD COLUMN "roomId" INTEGER;
+
+-- CreateTable
+CREATE TABLE "Room" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "ownerId" INTEGER NOT NULL,
+    "mateLimit" INTEGER NOT NULL,
+    "beds" INTEGER NOT NULL,
+    "bathrooms" INTEGER NOT NULL,
+    "monthlyPrice" INTEGER NOT NULL,
+    CONSTRAINT "Room_ownerId_fkey" FOREIGN KEY ("ownerId") REFERENCES "User" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+);
+
+-- CreateTable
+CREATE TABLE "Roommate" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "userId" INTEGER NOT NULL,
+    "roomId" INTEGER NOT NULL,
+    CONSTRAINT "Roommate_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
+    CONSTRAINT "Roommate_roomId_fkey" FOREIGN KEY ("roomId") REFERENCES "Room" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+);

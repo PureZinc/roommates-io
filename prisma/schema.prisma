@@ -19,7 +19,10 @@ model User {
   email     String   @unique
   createdAt DateTime @default(now())
 
-  profile UserProfile?
+  profile    UserProfile?
+  roomsOwned Room[]       @relation("OwnedRooms")
+  roomId     Int?
+  roommate   Roommate[]
 }
 
 model UserProfile {
@@ -32,4 +35,27 @@ model UserProfile {
   location      String?
   career        String?
   monthlyIncome Int?
+}
+
+model Room {
+  id      Int  @id @default(autoincrement())
+  owner   User @relation("OwnedRooms", fields: [ownerId], references: [id]) // Owner of the room
+  ownerId Int
+
+  mates     Roommate[]
+  mateLimit Int
+
+  beds         Int
+  bathrooms    Int
+  monthlyPrice Int
+}
+
+model Roommate {
+  id Int @id @default(autoincrement())
+
+  user   User @relation(fields: [userId], references: [id])
+  userId Int
+
+  room   Room @relation(fields: [roomId], references: [id])
+  roomId Int
 }
